@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="tr" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>İklim Kanunu: Gerçekler ve Safsatalar</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Calm Harmony (Warm Neutrals: #FAF8F5, #2C3E50; Accent Green: #4A6C6F; Accent Red: #D98B8B) -->
+    <!-- Application Structure Plan: A single-page application with a top navigation bar for quick access to thematic sections. The flow is designed to first establish the core difference between the Paris Agreement and the national law, then debunk the specific misinformation about major countries' participation, followed by a direct myth-busting section for common domestic fears (agriculture, etc.), and finally, provide a clear overview of the national law's actual components. This structure prioritizes clarity and direct refutation of misinformation over a chronological report summary, making it more user-friendly and effective for the target audience. -->
+    <!-- Visualization & Content Choices: 1. Paris vs. National Law: Goal=Compare -> Method=Two-column HTML/CSS layout -> Interaction=None, static comparison for clarity. 2. Country Status: Goal=Inform/Compare -> Method=Interactive HTML grid of cards -> Interaction=Click-to-expand accordion for details on each country. Justification: Avoids a dense table, making it visually engaging. 3. Myth vs. Fact: Goal=Inform/Correct -> Method=Two-column HTML layout with icons -> Interaction=None, direct visual contrast is key. 4. Law Components: Goal=Organize/Inform -> Method=Diagram built with HTML/CSS -> Interaction=Click on component to reveal description. Justification: More accessible and responsive than a static image or a canvas drawing for this purpose. All interactions are handled with vanilla JS. Libraries: Chart.js and Plotly.js are not required as structured HTML is more suitable for this content. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            overflow-x: hidden; /* Yatay kaydırmayı önlemek için */
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #FAF8F5;
+            color: #2C3E50;
+        }
+        .active-nav {
+            font-weight: 700;
+            color: #4A6C6F;
+            border-bottom: 2px solid #4A6C6F;
+        }
+        .inactive-nav {
+            color: #2C3E50;
+            border-bottom: 2px solid transparent;
+        }
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-in-out;
+        }
+        .section-fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        .section-fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <header class="bg-white/80 backdrop-blur-md sticky top-0 z-50 shadow-sm">
+        <nav class="container mx-auto px-4">
+            <div class="flex items-center justify-between h-16">
+                <a href="#" class="text-xl font-bold text-[#4A6C6F]">İklim Gerçekleri</a>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#karsilastirma" class="nav-link inactive-nav hover:text-[#4A6C6F] transition-colors duration-300 pb-1">Karşılaştırma</a>
+                    <a href="#ulkeler" class="nav-link inactive-nav hover:text-[#4A6C6F] transition-colors duration-300 pb-1">Ülkelerin Durumu</a>
+                    <a href="#safsatalar" class="nav-link inactive-nav hover:text-[#4A6C6F] transition-colors duration-300 pb-1">Safsatalar & Gerçekler</a>
+                    <a href="#kanun-detaylari" class="nav-link inactive-nav hover:text-[#4A6C6F] transition-colors duration-300 pb-1">Kanun Detayları</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="py-16 md:py-24 text-center bg-white">
+            <div class="container mx-auto px-4">
+                <h1 class="text-4xl md:text-6xl font-extrabold text-[#2C3E50] leading-tight mb-4">İklim Kanununu Anlamak</h1>
+                <p class="max-w-3xl mx-auto text-lg md:text-xl text-gray-600">
+                    Paris Anlaşması ve Türkiye'nin milli İklim Kanunu hakkındaki gerçekleri, yaygın yanlış bilgilerden arındırarak keşfedin.
+                </p>
+            </div>
+        </section>
+
+        <section id="karsilastirma" class="py-16 md:py-20 section-fade-in">
+            <div class="container mx-auto px-4">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl md:text-4xl font-bold text-[#2C3E50]">İkisi Farklı mı?</h2>
+                    <p class="mt-4 text-lg text-gray-600 max-w-2xl mx-auto">Paris Anlaşması küresel bir çerçeve sunarken, Türkiye'nin İklim Kanunu bu çerçevenin ulusal düzeyde nasıl uygulanacağını belirleyen yerli ve milli bir düzenlemedir.</p>
+                </div>
+                <div class="grid md:grid-cols-2 gap-8 lg:gap-12">
+                    <div class="bg-white p-8 rounded-xl shadow-lg border border-gray-200">
+                        <h3 class="text-2xl font-bold mb-4 flex items-center"><span class="text-3xl mr-3">🌍</span> Paris Anlaşması</h3>
+                        <div class="space-y-4 text-gray-700">
+                            <p><strong>Hukuki Niteliği:</strong> Egemen devletler arasında bağlayıcı bir uluslararası antlaşmadır.</p>
+                            <p><strong>Kapsam:</strong> Küreseldir. Tüm imzacı ülkeleri kapsar.</p>
+                            <p><strong>Birincil Amaç:</strong> Küresel sıcaklık artışını sınırlamak ve uluslararası iş birliğini teşvik etmek.</p>
+                        </div>
+                    </div>
+                    <div class="bg-white p-8 rounded-xl shadow-lg border border-gray-200">
+                        <h3 class="text-2xl font-bold mb-4 flex items-center"><span class="text-3xl mr-3">🇹🇷</span> Türkiye'nin İklim Kanunu</h3>
+                        <div class="space-y-4 text-gray-700">
+                            <p><strong>Hukuki Niteliği:</strong> TBMM tarafından çıkarılmış bir ulusal kanundur.</p>
+                            <p><strong>Kapsam:</strong> Ulusaldır. Sadece Türkiye Cumhuriyeti sınırları içinde geçerlidir.</p>
+                            <p><strong>Birincil Amaç:</strong> Paris Anlaşması hedeflerini uygulamak, 2053 net sıfır hedefine ulaşmak.</p>
+                        </div>
+                    </div>
+                </div>
+                 <div class="mt-12 bg-[#E3F2F2] p-6 rounded-lg text-center">
+                    <p class="text-lg font-medium text-[#4A6C6F]">
+                        <strong>Sonuç:</strong> Bu iki belge birbirinin rakibi değil, tamamlayıcısıdır. Türkiye'nin İklim Kanunu, Paris Anlaşması'nda verilen uluslararası sözlerin yurt içinde yerine getirilmesi için oluşturulmuş yasal bir yol haritasıdır.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section id="ulkeler" class="py-16 md:py-20 bg-white section-fade-in">
+            <div class="container mx-auto px-4">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl md:text-4xl font-bold text-[#2C3E50]">Büyük Kirleticiler Anlaşmayı Reddetti mi?</h2>
+                    <p class="mt-4 text-lg text-gray-600 max-w-2xl mx-auto">Kamuoyundaki yanlış kanının aksine, adı geçen büyük ekonomiler Paris Anlaşması'na taraftır. Ancak taahhüt ve uygulama seviyeleri farklılık göstermektedir.</p>
+                </div>
+                <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div class="country-card bg-gray-50 rounded-lg p-6 border border-gray-200">
+                        <h4 class="font-bold text-xl mb-2">🇺🇸 Amerika Birleşik Devletleri</h4>
+                        <p class="font-semibold text-green-700 mb-3">Durum: Taraf</p>
+                        <button class="accordion-toggle text-sm font-semibold text-[#4A6C6F] hover:underline">Detaylar ▼</button>
+                        <div class="accordion-content mt-4 text-sm text-gray-600">
+                            2016'da katıldı, 2020'de çekildi, ancak <span class="font-semibold">Şubat 2021'de resmi olarak yeniden katıldı.</span> Mevcut durumda anlaşmanın aktif bir tarafıdır.
+                        </div>
+                    </div>
+                    <div class="country-card bg-gray-50 rounded-lg p-6 border border-gray-200">
+                        <h4 class="font-bold text-xl mb-2">🇨🇳 Çin</h4>
+                        <p class="font-semibold text-green-700 mb-3">Durum: Taraf</p>
+                        <button class="accordion-toggle text-sm font-semibold text-[#4A6C6F] hover:underline">Detaylar ▼</button>
+                        <div class="accordion-content mt-4 text-sm text-gray-600">
+                            Dünyanın en büyük emisyon yayıcısı olan Çin, anlaşmayı <span class="font-semibold">imzaladı ve onayladı.</span> Anlaşma çerçevesinde aktif olarak yer almaktadır.
+                        </div>
+                    </div>
+                    <div class="country-card bg-gray-50 rounded-lg p-6 border border-gray-200">
+                        <h4 class="font-bold text-xl mb-2">🇷🇺 Rusya</h4>
+                        <p class="font-semibold text-green-700 mb-3">Durum: Taraf</p>
+                        <button class="accordion-toggle text-sm font-semibold text-[#4A6C6F] hover:underline">Detaylar ▼</button>
+                        <div class="accordion-content mt-4 text-sm text-gray-600">
+                            Anlaşmayı 2019'da resmi olarak onayladı. Ancak iklim eylemleri uluslararası kuruluşlarca <span class="font-semibold">"Kritik Derecede Yetersiz"</span> olarak değerlendirilmektedir.
+                        </div>
+                    </div>
+                    <div class="country-card bg-gray-50 rounded-lg p-6 border border-gray-200">
+                        <h4 class="font-bold text-xl mb-2">🇮🇹 İtalya</h4>
+                        <p class="font-semibold text-green-700 mb-3">Durum: Taraf</p>
+                        <button class="accordion-toggle text-sm font-semibold text-[#4A6C6F] hover:underline">Detaylar ▼</button>
+                        <div class="accordion-content mt-4 text-sm text-gray-600">
+                            Avrupa Birliği üyesi olarak anlaşmaya taraftır ve AB'nin kolektif hedeflerine uymakla yükümlüdür. <span class="font-semibold">Anlaşmayı reddetmesi söz konusu değildir.</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="safsatalar" class="py-16 md:py-20 section-fade-in">
+            <div class="container mx-auto px-4">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl md:text-4xl font-bold text-[#2C3E50]">Safsatalar ve Gerçekler</h2>
+                    <p class="mt-4 text-lg text-gray-600 max-w-2xl mx-auto">İklim Kanunu hakkında dolaşan ve endişe yaratan bazı iddiaların gerçeklikle bir ilgisi bulunmamaktadır. İşte doğrular:</p>
+                </div>
+                <div class="space-y-8">
+                    <div class="grid md:grid-cols-2 gap-4 md:gap-8 items-center bg-gray-50 p-6 rounded-lg shadow-md border border-gray-200">
+                        <div class="safsata">
+                            <h4 class="text-xl font-semibold flex items-center text-[#D98B8B]"><span class="text-2xl mr-3">❌</span> Safsata</h4>
+                            <p class="mt-2 text-gray-800">"Tarım yasaklanacak, çiftçi istediği ürünü ekemeyecek."</p>
+                        </div>
+                        <div class="gercek border-t-2 md:border-t-0 md:border-l-2 border-dashed pt-4 md:pt-0 md:pl-8">
+                            <h4 class="text-xl font-semibold flex items-center text-[#4A6C6F]"><span class="text-2xl mr-3">✅</span> Gerçek</h4>
+                            <p class="mt-2 text-gray-600">Tam tersine, kanun <span class="font-semibold">toprakları, tarımı, hayvancılığı ve gıda güvenliğini</span> kuraklık ve afetlere karşı korumayı amaçlamaktadır. Cezai hiçbir madde yoktur.</p>
+                        </div>
+                    </div>
+                    <div class="grid md:grid-cols-2 gap-4 md:gap-8 items-center bg-gray-50 p-6 rounded-lg shadow-md border border-gray-200">
+                        <div class="safsata">
+                            <h4 class="text-xl font-semibold flex items-center text-[#D98B8B]"><span class="text-2xl mr-3">❌</span> Safsata</h4>
+                            <p class="mt-2 text-gray-800">"Millete zorla yapay et yedirilecek, hayvancılık bitecek."</p>
+                        </div>
+                        <div class="gercek border-t-2 md:border-t-0 md:border-l-2 border-dashed pt-4 md:pt-0 md:pl-8">
+                            <h4 class="text-xl font-semibold flex items-center text-[#4A6C6F]"><span class="text-2xl mr-3">✅</span> Gerçek</h4>
+                            <p class="mt-2 text-gray-600">Kanun metninde yapay eti veya hayvancılık yasağını ima eden <span class="font-semibold">tek bir ifade dahi yoktur.</span> Bu iddia tamamen asılsızdır.</p>
+                        </div>
+                    </div>
+                    <div class="grid md:grid-cols-2 gap-4 md:gap-8 items-center bg-gray-50 p-6 rounded-lg shadow-md border border-gray-200">
+                        <div class="safsata">
+                            <h4 class="text-xl font-semibold flex items-center text-[#D98B8B]"><span class="text-2xl mr-3">❌</span> Safsata</h4>
+                            <p class="mt-2 text-gray-800">"Paris Anlaşması'yla yabancılar tarım arazilerimize el koyacak."</p>
+                        </div>
+                        <div class="gercek border-t-2 md:border-t-0 md:border-l-2 border-dashed pt-4 md:pt-0 md:pl-8">
+                            <h4 class="text-xl font-semibold flex items-center text-[#4A6C6F]"><span class="text-2xl mr-3">✅</span> Gerçek</h4>
+                            <p class="mt-2 text-gray-600">Paris Anlaşması'nda araziye el koyma gibi bir mekanizma <span class="font-semibold">bulunmamaktadır.</span> Anlaşma, emisyon azaltımına odaklıdır ve Türkiye kendi egemenlik haklarını koruyarak anlaşmayı imzalamıştır.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="kanun-detaylari" class="py-16 md:py-20 bg-white section-fade-in">
+            <div class="container mx-auto px-4">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl md:text-4xl font-bold text-[#2C3E50]">Peki, Milli İklim Kanununda Neler Var?</h2>
+                    <p class="mt-4 text-lg text-gray-600 max-w-2xl mx-auto">Kanun, Türkiye'nin iklim hedeflerine ulaşması için somut adımlar ve mekanizmalar içermektedir. İşte bazı temel başlıklar:</p>
+                </div>
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="bg-gray-50 p-6 rounded-lg border border-gray-200">
+                        <h4 class="text-xl font-bold mb-2">🎯 2053 Net Sıfır Hedefi</h4>
+                        <p class="text-gray-600">Kanunun nihai amacı, Türkiye'nin 2053 yılına kadar sera gazı emisyonlarını net olarak sıfırlamasıdır. Tüm politikalar bu hedefe hizmet eder.</p>
+                    </div>
+                    <div class="bg-gray-50 p-6 rounded-lg border border-gray-200">
+                        <h4 class="text-xl font-bold mb-2">🏭 Emisyon Ticaret Sistemi (ETS)</h4>
+                        <p class="text-gray-600">Sanayi tesisleri gibi büyük emisyon kaynakları için bir karbon piyasası oluşturulacaktır. Bu, vatandaşlardan vergi almak değil, sanayinin emisyonlarını azaltmasını teşvik etmektir.</p>
+                    </div>
+                    <div class="bg-gray-50 p-6 rounded-lg border border-gray-200">
+                        <h4 class="text-xl font-bold mb-2">🌿 Türkiye Yeşil Taksonomisi</h4>
+                        <p class="text-gray-600">Hangi ekonomik faaliyetlerin "çevre dostu" ve "sürdürülebilir" olduğunu sınıflandıran bir sistemdir. Yeşil yatırımları teşvik etmeyi amaçlar.</p>
+                    </div>
+                    <div class="bg-gray-50 p-6 rounded-lg border border-gray-200">
+                        <h4 class="text-xl font-bold mb-2">🏘️ Yerel Eylem Planları</h4>
+                        <p class="text-gray-600">Belediyeler ve yerel yönetimler, kendi bölgelerine özgü iklim değişikliği ile mücadele ve uyum planları hazırlamakla yükümlü olacaklardır.</p>
+                    </div>
+                    <div class="bg-gray-50 p-6 rounded-lg border border-gray-200">
+                        <h4 class="text-xl font-bold mb-2">💧 Uyum Faaliyetleri</h4>
+                        <p class="text-gray-600">Sadece emisyon azaltımı değil, aynı zamanda su kaynaklarının korunması, afet risk yönetimi ve kuraklıkla mücadele gibi iklim değişikliğinin etkilerine uyum sağlamaya yönelik çalışmalar da kanun kapsamındadır.</p>
+                    </div>
+                    <div class="bg-gray-50 p-6 rounded-lg border border-gray-200">
+                        <h4 class="text-xl font-bold mb-2">⚖️ İdari Yaptırımlar</h4>
+                        <p class="text-gray-600">Kanunla getirilen yükümlülüklere uymayan (örneğin emisyon raporunu sunmayan) işletmelere yönelik idari para cezaları öngörülmektedir.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+    
+    <footer class="bg-[#2C3E50] text-white">
+        <div class="container mx-auto px-4 py-8 text-center">
+            <p>Bu portal, iklim politikaları hakkındaki kamuoyu tartışmalarının doğru bilgiyle yapılmasına katkıda bulunmak amacıyla hazırlanmıştır.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const accordionToggles = document.querySelectorAll('.accordion-toggle');
+
+            accordionToggles.forEach(button => {
+                button.addEventListener('click', function () {
+                    const content = this.nextElementSibling;
+                    const isExpanded = content.style.maxHeight && content.style.maxHeight !== '0px';
+
+                    if (isExpanded) {
+                        content.style.maxHeight = '0px';
+                        this.textContent = 'Detaylar ▼';
+                    } else {
+                        content.style.maxHeight = content.scrollHeight + 'px';
+                        this.textContent = 'Kapat ▲';
+                    }
+                });
+            });
+
+            const sections = document.querySelectorAll('.section-fade-in');
+            const navLinks = document.querySelectorAll('.nav-link');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        
+                        const id = entry.target.getAttribute('id');
+                        navLinks.forEach(link => {
+                            link.classList.remove('active-nav');
+                            link.classList.add('inactive-nav');
+                            if (link.getAttribute('href') === `#${id}`) {
+                                link.classList.add('active-nav');
+                                link.classList.remove('inactive-nav');
+                            }
+                        });
+                    }
+                });
+            }, { threshold: 0.3 });
+
+            sections.forEach(section => {
+                observer.observe(section);
+            });
+        });
+    </script>
+
+</body>
+</html>
